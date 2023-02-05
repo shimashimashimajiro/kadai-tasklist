@@ -1,14 +1,11 @@
 class TasksController < ApplicationController
   before_action :require_user_logged_in
   before_action :correct_user, only: [:show, :edit, :update,:destroy]
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
+
   def index
-    if logged_in?
-      @task = current_user.tasks.build  # form_with 用
+    
       @pagy, @tasks = pagy(current_user.tasks.order(id: :desc))
-      #@tasks = Task.all
-      #@tasks = User.find(params[:id]) 
-    end
+      
   end
   
   def show
@@ -48,17 +45,21 @@ class TasksController < ApplicationController
   end
 
   def destroy
-    @task.destroy
+   if @task.destroy
 
     flash[:success] = 'Task は正常に削除されました'
     redirect_to tasks_url
+    
+   else
+    flash.now[:danger] = 'Task は削除されませんでした'
+      render :edit
+      
+   end
   end
 
   private
   
-  def set_task
-    @task = Task.find(params[:id])
-  end
+
 
   # Strong Parameter
   def task_params
