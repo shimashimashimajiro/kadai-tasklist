@@ -3,9 +3,7 @@ class TasksController < ApplicationController
   before_action :correct_user, only: [:show, :edit, :update,:destroy]
 
   def index
-    
-      @pagy, @tasks = pagy(current_user.tasks.order(id: :desc))
-      
+     @pagy, @tasks = pagy(current_user.tasks.order(id: :desc))
   end
   
   def show
@@ -25,8 +23,8 @@ class TasksController < ApplicationController
     else
       @pagy, @tasks = pagy(current_user.tasks.order(id: :desc))
       flash.now[:danger] = 'Task が作成されませんでした'
-      #render :new
-      render 'tasks/index'
+      render :new
+      #render 'tasks/index'
     end
   end
 
